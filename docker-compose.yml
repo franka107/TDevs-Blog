@@ -3,7 +3,7 @@ version: "3.7"
 services:
   db:
     image: mariadb:10
-    containername: td-wp-db
+    container_name: td-wp-db
     restart: always
     environment:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
@@ -15,35 +15,35 @@ services:
 
   wordpress:
     image: wordpress:5.5.1-fpm-alpine
-    containername: td-wp-site
+    container_name: td-wp-site
     restart: always
     volumes:
-      - wordpress:/var/www/html
+      - ./wordpress:/var/www/html
     depends_on:
       - db
     environment:
-      WORDPRESS_DB_HOST: "${WORDPRESS_DB_HOST}"
+      WORDPRESS_DB_HOST: db
       WORDPRESS_DB_NAME: "${WORDPRESS_DB_NAME}"
       WORDPRESS_DB_USER: "${WORDPRESS_DB_USER}"
       WORDPRESS_DB_PASSWORD: "${WORDPRESS_DB_PASSWORD}"
 
   nginx:
     image: nginx:alpine
-    containername: td-wp-nginx
-    restart: always
+    container_name: td-wp-nginx
     depends_on:
       - wordpress
     ports:
-      - 8080:80
+      - 80:80
     volumes:
       - ./conf.d:/etc/nginx/conf.d
-      - wordpress:/var/www/html
+      - ./wordpress:/var/www/html
 
   phpmyadmin:
-    image: phpmyadmin:5.0.2-fpm-alpine
-    containername: td-wp-phpmyadmin
+    image: phpmyadmin:latest
+    container_name: td-wp-phpmyadmin
     restart: always
-    depends_on: db
+    depends_on:
+      - db
     ports:
       - 8080:80
     environment:
@@ -53,6 +53,4 @@ services:
     
 
 volumes:
-  db:
-  wordpress:
-      
+  db: 
