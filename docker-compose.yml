@@ -28,15 +28,26 @@ services:
       WORDPRESS_DB_PASSWORD: "${WORDPRESS_DB_PASSWORD}"
 
   nginx:
-    image: nginx:alpine
+    image: nginx:1.15.12-alpine
     container_name: td-wp-nginx
     depends_on:
       - wordpress
     ports:
       - 80:80
     volumes:
-      - ./conf.d:/etc/nginx/conf.d
+      - ./nginx-conf:/etc/nginx/conf.d
       - ./wordpress:/var/www/html
+      - certbot-etc:/etc/letsencrypt
+
+  certbot:
+    depends_on:
+      - nginx
+    image: certbot/certbot
+    container_name: td-wp-certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - ./wordpress:/var/www/html
+    command: certonly --webroot --webroot-path=/var/www/html --email fcaryv@gmail.com --agree-tos --no-eff-email --staging -d tdevelopments.ga -d www.tdevelopments.ga
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -54,3 +65,4 @@ services:
 
 volumes:
   db: 
+  certbot-etc:
