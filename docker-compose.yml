@@ -34,6 +34,7 @@ services:
       - wordpress
     ports:
       - 80:80
+      - 443:443
     volumes:
       - ./nginx-conf:/etc/nginx/conf.d
       - ./wordpress:/var/www/html
@@ -47,7 +48,8 @@ services:
     volumes:
       - certbot-etc:/etc/letsencrypt
       - ./wordpress:/var/www/html
-    command: certonly --webroot --webroot-path=/var/www/html --email fcaryv@gmail.com --agree-tos --no-eff-email --staging -d tdevelopments.ga -d www.tdevelopments.ga
+    "command: certonly --webroot --webroot-path=/var/www/html --email fcaryv@gmail.com --agree-tos --no-eff-email --staging -d tdevelopments.ga -d www.tdevelopments.ga"
+    command: certonly --webroot --webroot-path=/var/www/html --email fcaryv@gmail.com --agree-tos --no-eff-email --force-renewal -d tdevelopments.ga -d www.tdevelopments.ga
 
   phpmyadmin:
     image: phpmyadmin:latest
