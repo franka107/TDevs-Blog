@@ -63,6 +63,8 @@ services:
       PMA_ARBITRARY: 1
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      UPLOAD_LIMIT: 10000000000
+
     
 
 volumes:
